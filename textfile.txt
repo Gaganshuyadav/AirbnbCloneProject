@@ -1,0 +1,351 @@
+        <|---------------(EJS-MATE)----------------|>
+
+const ejsMate = require("ejs-mate");
+app.engine("ejs",ejsMate);
+
+//------------------------------------
+
+<% layout('/layouts/boilerplate.ejs') -%>     /*in which page you use your boilerplate*/
+
+<div class="container">       /*this page made in the layouts folder in views folder */
+    <%- body -%>
+</div>
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+       
+        <|---------------( Two ways to take input from form)----------------|>
+
+        /* ----First Method for new user data*/
+
+app.post("/listings",async (req,res,next) =>{
+
+     const {title,description,image,price,location,country} = req.body;
+     const newlisting = new Listing({
+        title: title,
+        description:description,
+        image: image,
+        price: price,
+        location: location,
+        country: country,
+     })
+
+     await newlisting.save();
+
+     res.redirect("/listings");
+});
+
+        /* ----Second Method for new user data*/
+   
+app.post("/listings",async (req,res,next) =>{
+
+    console.log(req.body);
+    const newlisting = new Listing(req.body.listing);
+    await newlisting.save();
+    res.redirect("/listings");
+    
+});
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+        <|---------------( Form Validations)----------------|>
+When we enter data in the form, the browser and/or the web server will check to see that the data is in the correct format and 
+within the constraints set by the application.
+
+<|-----( Success and Failure Text )-----|> 
+valid-feedback and invalid-feedback text
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        
+        <|---------------( app.all() Function )----------------|>
+this function is used to route all types of HTTP requests. Like we define single API app.all('/user') which will accept all type of HTTP request.
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        
+        <|---------------( Use Joi instead of specific errors )----------------|>
+
+Data validation is one of topics that I am interesting. I always review my code after developed features or fixed bugs. 
+There are many places where need to validate data, it is really terrible. 
+Some cases, we need to validate data input because ensure the data into API, it will not make any problems to crash system.
+-------------------------------------------------------
+//What is JOI?
+
+It is a library to make ensure your data input the same with Object schema define before.
+
+//Why is use JOI to validate data before processing?
+
+Verify between input data with Object schema define before is quickly.
+Avoid some exceptions.
+Avoid handling wrong data input by user.
+Ensure data integrity, limit data rollback in the database.
+-------------------------------------------------------
+As we see below example, the logic is too complicated for data validation.
+
+
+<|--------( Example )--------|>
+//Create Route
+app.post("/listings",async (req,res,next) =>{
+    try{
+    console.log(req.body);
+    if(!req.body.listing){
+        throw new ExpressError(400, "Send valid data for listing");                              //Schema Validation to Ensure data integrity and decrease vulnerabilities     
+    }
+    const newlisting = new Listing(req.body.listing);
+  ------------------------------------------------------------------
+  |    if(!newlisting.description){                                |
+  |        throw new ExpressError(400, "Description is missing!"); |
+  |    }                                                           |
+  |    if(!newlisting.title){                                      |
+  |        throw new ExpressError(400,"Title is missing!");        |
+  |    }                                                           |
+  |    if(!newlisting.location){                                   |
+  |        throw new ExpressError(400,"Location is missing!");     |
+  |    }                                                           |
+  ------------------------------------------------------------------
+    await newlisting.save();
+
+    res.redirect("/listings");
+    }
+    catch(err){
+        next(err);
+    }
+});
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        
+        <|---------------( Create Reviews )----------------|>
+POST  /listings/:id/reviews
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        
+        <|---------------( Validations for Reviews )----------------|>
+(1).Client side validation(form)
+(2).Server side Validation(joi)
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        
+        <|---------------( Deleting Reviews )----------------|>
+Mongo $pull operator
+$pull :- the $pull operator removes from an existing array all instances of a value or values that match a specified condition.
+
+The $pull operator in MongoDB provides a way to delete specific elements from Arryas and helps in data manipulation and customization.
+
+/*Example*/
+ await Listing.findByIdAndUpdate(id,{$pull: {reviews: reviewId}});
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        
+        <|---------------( Express Router )----------------|>
+Express Routers are a way to organize your Express application such that our primary app.js file does not become bloated.
+
+const router = express.Router()   //creates new router object
+
+const router = express.Router({ mergeParams: true});   //it helps us to use req.params in the child routes.
+    
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+        <|---------------( req.session )----------------|>
+        
+when the session is authenticated, Passport will call the deserializeUser function,which in the above example is yielding the previously stored user ID,username,and picture.the req.user property is then set to the Yielded information.
+(after authentication, req.session variables are deleted because of deserializeUser)
+
+        <|---------------( res.locals )----------------|>
+
+Use this property to set variables accessible in templates rendered with res.render. 
+The variables set on res.locals are available within a single request-response cycle, and will not be shared between requests.
+
+
+(the 'res.locals' property is an object that holds response local variables specific to the current request.
+it has a scope limited to the request and is accessible only to the view(s) rendered during that particular request/response cycle.)
+
+In order to keep local variables for use in template rendering between requests, use app.locals instead.
+
+res.locals.successMsg = "Hello";
+
+       <|---------------( app.locals )----------------|>
+
+the app.locals object has properties that are local variables within the application. these variables are local to the application and are very useful.
+       
+    
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        <|---------------( Login/Security/signup (Authentication) )----------------|>
+
+<|---(Authentication)---|>
+    Authentication is the process of verifying who someone is
+
+<|---(Authorization)---|>
+    Authorization is the process of verifying that specific applications,files, and data a user has acccess to
+
+<|---(Hashing function)---|>
+    We Never store the passwords as it is. We store their hashed form.( convert password using hashing function).
+
+<|---(Hashing)---|>
+    for every input, there is a fixed output.
+    They are  one-way functions, we can't get input from output.(nearly impossible).
+    For a different input, there is a different output but of same length.
+    Small changes in input should bring large changes in output.
+    Example:-SHA-256(very fast generator ,not used generally),MD5,CRC,bcrypt,Argon2(most secured and generate in 10min)
+
+<|---(Salting)---|>
+    password salting is a technique to protect passwords stored in databases by  adding a string of 32 or more  characters and then hashing them.
+    Salting prevents hackers who breach an enterprise environment from reverse-engineering passwords(reverse lookup table) and steading them from the databases.
+    Each organization have their own salts.
+
+<|---(npm i passport)---|>
+    Passport is Express-compatible authentication middleware for Node.js.
+    [ digestAlgorithm: specifies the pbkdf2 digest algorithm]
+
+<|---(npm i passport-local)---|>
+    this module lets you authenticate using a username and password in your Node.js applications. By plugging into Passport, local authentication can be easily 
+
+<|---(npm i passport-local-mongoose)---|>
+    Passport-Local Mongoose is a Mongoose plugin that simplifies building username and password login with Passport.
+
+--------------------------------------------------------------------------
+                <|---( Configuring Strategy )---|>
+
+passport.initialize()
+A middleware that initialize passport.
+
+passport.session()
+A web application needs the ability to identify users as they browse from page to page. this series of requests and responses, each associated with the same user ,is known as a session.
+
+passport.user(new LocalStrategy(User.authenticate()))
+    login/signup
+
+passport.serializeUser(User.serializeUser());
+    serialize:- store the user related information in the session
+
+passport.deserializeUser(User.deserializeUser());
+     deserialize:- unstore or remove the user related information in the session
+--------------------------------------------------------------------------
+
+              <|---( Connecting Login Route )---|>
+
+req.isAuthenticated()   // passport method :- How to check if User is Logged in
+
+req.logout((err) => { if(err){ return next(err);} })   //to logout a user from session.
+
+              <|---( Login after signup )---|>
+
+Passport's login method automatically establishes a login session.
+We can invoke login to automatically login a user.
+
+req.login(registeredUser,(err) => {               
+        if(err){
+            return next(err);
+        } 
+        req.flash("success","Welcome to Wanderlust!");
+        res.redirect("/listings");                              
+    });
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        <|---------------( MVC: Model,View,Controller )----------------|>
+Implement Design for listings
+
+Model-View-Controller(MVC) is a software design pattern commonly used for developing user interfaces that divides the related program logic into three interconnected elements.
+Model:- the internal representations of information(databases or Schemas or all data related logic).
+View:- thee interface that presents information to and accepts it from the user(frontend or UI logic).
+Controller:- the software linking the two.(the logic or process all business logic and incoming requests).
+       
+        <|---------------( Router.route )----------------|>
+A way to group together routes with diferent verbs but same paths
+
+Router.route("/:id)
+.get(sdsadsafa)
+.post(safsafdf)
+
+        <|---------------( Starability )----------------|>
+        github
+
+        <|----------------------( Upload image )----------------------|>
+
+    <|---------------( manipulating form )----------------|>
+    <form enctype="multipart/form-data">
+        <input type="file">
+    </form>
+
+    npm install multer
+
+    const multer = require("multer");
+    const upload = multer({ dest: "uploads/" });
+     .post( 
+        upload.single("listing[image]") , 
+        (req,res)=>{ 
+            res.send(req.file);
+         }
+    )
+
+    <|---------------( Cloud setup )----------------|>
+        npm i dotenv                        //to access .env file
+        if(process.env.NODE_ENV != "production") {
+            require("dotenv").config();
+        }
+        console.log(process.env.SECRET);
+
+    <|---------------( Store Files )----------------|>
+
+const cloudinary = require("cloudinary").v2;
+const  CloudinaryStorage  = require("cloudinary-multer");
+
+cloudinary.config({
+    cloud_name: process.env.CLOUD_NAME, 
+    api_key: process.env.CLOUD_API_KEY,
+    api_secret: process.env.CLOUD_API_SECRET
+});
+
+const storage = CloudinaryStorage({
+    cloudinary: cloudinary,
+  });
+
+module.exports = {
+    cloudinary,
+    storage,
+}
+----------------------------------------------------------------------
+const multer = require("multer");
+const {storage} = require("../cloudConfig.js");
+const upload = multer({ storage: storage });
+----------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        <|---------------( MapBox )----------------|>
+
+Geocoding:- Geocoding is the process of converting addresses (like a street address) into geographic coordinates (like latitude and longitude), which 
+you cn use to place markers on a map, or position the map.
+  
+  The Mapbox Geocoding API does two things: forward geocoding(location to coordinates) and reverse geocoding(coordinates to location)
+
+--geocoding github
+--docs.mapbox.com/api/search/geocoding
+
+Storing Coordinates:-
+Geojson:-The most simple structure in Geojson is a point. below is an example point representing the approximate location .
+Note:- longitude comes first in  Geojson coordinate array, not latitude.
+
+//mongoose GeoJSON and mapbox return data formats are same.
+{
+    "type" : "Point",
+    "coordinates" : [
+        -122.5,
+        37.7
+    ]
+    
+}
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        <|---------------( IN production we use connect-mongo for session-storage )----------------|>
+
+
+
+
+
+
+
