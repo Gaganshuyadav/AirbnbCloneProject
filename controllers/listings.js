@@ -44,7 +44,6 @@ module.exports.showListing = async (req,res) =>{
 module.exports.createListing = async (req,res,next) =>{
     try{
 
-   
     //add listing information
     const newlisting = new Listing(req.body.listing);
 
@@ -147,3 +146,29 @@ module.exports.destroyListing = async (req,res) =>{
     res.redirect("/listings");
 
 }
+
+module.exports.searchListing = async(req,res) =>{
+    const {search} = req.body;
+    
+    //search by location
+    let allListings = await Listing.find({location: {$regex: `(.*)${search}(.*)`,$options: "i" }});
+    //search by country
+    if(allListings.length<1){
+        allListings = await Listing.find({country: {$regex: `(.*)${search}(.*)`,$options: "i" }});
+    }
+    //search by title
+    if(allListings.length<1){
+        allListings = await Listing.find({title: {$regex: `(.*)${search}(.*)`,$options: "i" }});
+    }
+    
+    res.render("listings/index.ejs", {allListings});
+
+}
+
+module.exports.searchListingByCategory = async(req,res) => {
+   const {name} = req.params;
+   const allListings = await Listing.find({category:`${name}`});
+   res.render("listings/index.ejs", {allListings});
+}
+
+

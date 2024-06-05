@@ -130,8 +130,15 @@ body{
 /*Filters*/
 #filters{
     display:flex !important;
-    flex-wrap: wrap;
+    flex-wrap: wrap !important;
 }
+
+#filters a{
+    color: black;
+    text-decoration: none;
+
+}
+
 .filter{
     text-align:center !important;
     margin-right: 1.2rem !important;
@@ -146,6 +153,7 @@ body{
 .filter p{
     font-size:0.8rem !important;
 }
+
 
 /*Tax Switch*/
 
@@ -163,7 +171,7 @@ body{
 }
 
 .tax-info{
-    display:none !important;
+    display:none ;
 }
 
 /*search input*/
@@ -193,3 +201,4 @@ body{
     margin-right:0.5rem !important;
     font-size:0.8 !important;
   }
+

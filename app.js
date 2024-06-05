@@ -59,7 +59,7 @@ const flash = require("connect-flash");
 const store = MongoStore.create({
     mongoUrl: dburl,
     crypto: {
-        secret: "mysupersecretcode"           //When working with sensitive session data it is recommended to use encryption
+        secret: process.env.SECRET           //When working with sensitive session data it is recommended to use encryption
     },
     touchAfter: 24*3600,                      //Interval (in seconds) between session updates.
 })
@@ -71,7 +71,7 @@ store.on("error", () => {
 
 const sessionOptions = {
     store,                                     //or write store:store
-    secret: "mysupersecretcode",
+    secret: process.env.SECRET ,
     resave: false,
     saveUninitialized: true,
     cookie:{

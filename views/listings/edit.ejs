@@ -29,6 +29,24 @@
           <input type="file" class="form-control"  name="listing[image]" >
         </div>
         
+        <div class="mb-3">
+          <label for="category">Select Category</label>
+          <select class="form-select form-select-sm" name="listing[category]" id="category" required>
+            <option value="<%= listing.category %>" selected><%= listing.category %></option>
+            <option value="Trending">Trending</option>
+            <option value="Rooms">Rooms</option>
+            <option value="Iconic Cities">Iconic Cities</option>
+            <option value="Mountains">Mountains</option>
+            <option value="Castles">Castles</option>
+            <option value="Camping">Camping</option>
+            <option value="Farms">Farms</option>
+            <option value="Amazing Pools">Amazing Pools</option>
+            <option value="Skiing">Skiing</option>
+            <option value="Beach">Beach</option>
+            <option value="Arctic">Arctic</option>
+          </select>
+        </div>
+
         <div class="row">
           <div class="mb-3 col-md-4">
             <label for="form-label">Price</label>

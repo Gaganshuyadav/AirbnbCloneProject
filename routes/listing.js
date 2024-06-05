@@ -82,8 +82,19 @@ router.delete(
     asyncWrap( listingController.destroyListing )
 );
 
-module.exports = router;
+//searchLocation Route
+router.post(
+    "/search",
+    asyncWrap( listingController.searchListing )
+)
 
+//search by Category
+router.get(
+    "/category/:name",
+    asyncWrap( listingController.searchListingByCategory )
+)
+
+module.exports = router;
 
 
 
