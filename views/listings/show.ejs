@@ -10,11 +10,11 @@
 
     <br>
     <div class="row">
-        <div class="col-8 offset-3">
+        <div class="col-xs-11 col-lg-8 offset-xm-1 offset-lg-3 ">
             <h3> <%= listing.title %></h3>
         </div>
     
-        <div class="card col-6 offset-3 listing-card">
+        <div class="card col-lg-6 col-xs-10 offset-xm-1 offset-lg-3 listing-card ">
             <img src="<%= listing.image.url %>" class="card-img-top show-img" >
             <div class="card-body">
                 <p class="card-text">Owned by <i><%= listing.owner.username %></i></p>
@@ -36,7 +36,7 @@
             <% } %>
         </div>
                                                                                
-        <div class="col-8 offset-3">
+        <div class="col-xs-11 col-lg-8 offset-xm-1 offset-lg-3">
             <% if(currUser) {  %>
             <hr>
             <h4>Leave a Review</h4>
@@ -72,9 +72,10 @@
             <% if(listing.reviews.length > 0) { %>
                 <hr>
                 <div class="row">
+                    <h4><b>All Reviews</b></h4>
                     <% for(let review of listing.reviews) { %>
-                        <h4><b>All Reviews</b></h4>
-                        <div class="card col-5 ms-3 mt-3">
+                        
+                        <div class="card col-5 ms-3 mt-3 rounded-3">
                             <div class="card-body">
                                 <h5 class="card-title">@<%= review.author.username %></h5>
                                 <p class="card-text"><%= review.comment %></p>
@@ -94,7 +95,7 @@
 
         <!--Map Box-->
         
-        <div class="card col-6 offset-3 listing-card">
+        <div class="card col-lg-6 col-xm-11 offset-xm-1 offset-lg-3 listing-card">
             <hr>
             <h3>Where you'll be</h3>
             

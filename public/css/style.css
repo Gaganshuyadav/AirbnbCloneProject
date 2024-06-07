@@ -202,3 +202,84 @@ body{
     font-size:0.8 !important;
   }
 
+  /*==========================(Responsive design for small and medium devices)===================================================================================================*/
+
+  @media screen and (min-width:555px)and (max-width:780px){
+    
+ /*Filter-Switch*/
+ .filter-switch{
+    display:inline !important;
+}
+
+/*Filters*/
+#filters{
+    display:flex !important;
+    flex-wrap: nowrap !important;
+    overflow:auto;
+    box-shadow: 0px 18px 10px -23px black;
+}
+
+#filters::-webkit-scrollbar {
+    display:none;
+}
+
+/*Tax Switch*/
+
+.tax-toggle{
+    border:1px solid gray !important;
+    margin-bottom: 1rem !important;
+    color:black;
+  }
+
+
+/*---------------------*/
+
+/*show page*/
+
+/* MAP */
+#map{
+     height:270px;
+    width:520px; 
+}
+}
+
+@media screen and (min-width:200px)and (max-width:554px){
+    
+    /*Filter-Switch*/
+    .filter-switch{
+       display:inline !important;
+   }
+   
+   /*Filters*/
+   #filters{
+       display:flex !important;
+       flex-wrap: nowrap !important;
+       overflow:auto;
+       box-shadow: 0px 18px 10px -23px black;
+   }
+   
+   #filters::-webkit-scrollbar {
+       display:none;
+   }
+   
+   /*Tax Switch*/
+   
+   .tax-toggle{
+       border:1px solid gray !important;
+       margin-bottom: 1rem !important;
+       color:black;
+     }
+   
+/*---------------------*/
+
+/*show page*/
+
+   
+   /* MAP */
+   #map{
+        height:300px;
+       width:340px; 
+   }
+}
+   
+   

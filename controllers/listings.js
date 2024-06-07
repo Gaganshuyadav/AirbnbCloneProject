@@ -150,16 +150,13 @@ module.exports.destroyListing = async (req,res) =>{
 module.exports.searchListing = async(req,res) =>{
     const {search} = req.body;
     
-    //search by location
-    let allListings = await Listing.find({location: {$regex: `(.*)${search}(.*)`,$options: "i" }});
-    //search by country
-    if(allListings.length<1){
-        allListings = await Listing.find({country: {$regex: `(.*)${search}(.*)`,$options: "i" }});
-    }
-    //search by title
-    if(allListings.length<1){
-        allListings = await Listing.find({title: {$regex: `(.*)${search}(.*)`,$options: "i" }});
-    }
+    //search by location, country, title 
+    let allListings = await Listing.find({$or : [
+                                                 {location: {$regex: `(.*)${search}(.*)`,$options: "i" }},
+                                                 {country: {$regex: `(.*)${search}(.*)`,$options: "i" }},
+                                                 {title: {$regex: `(.*)${search}(.*)`,$options: "i" }}
+                                                ]
+                                            });
     
     res.render("listings/index.ejs", {allListings});
 
