@@ -1,17 +1,5 @@
 # Airbnb Clone Project
 
-## Table of Contents
-
-1. [Project Overview](#project-overview)
-2. [Features](#features)
-3. [Technologies Used](#technologies-used)
-4. [Getting Started](#getting-started)
-5. [Usage](#usage)
-6. [Error Handling](#error-handling)
-7. [Responsive Design](#responsive-design)
-8. [Contributing](#contributing)
-9. [License](#license)
-
 ## Project Overview
 
 This project is a clone of the Airbnb platform, enabling users to browse, add, update, and delete property listings. Built with Node.js and Express, the application focuses on user authentication and authorization to secure access to features. The design is responsive, ensuring an optimal experience across devices.
